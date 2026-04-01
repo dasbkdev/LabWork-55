@@ -3,8 +3,12 @@ package homework.lesson55.dao;
 import homework.lesson55.model.Quiz;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +21,23 @@ public class QuizDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void create(Quiz quiz) {
+    public Long create(Quiz quiz) {
         String sql = "insert into quizzes(title, description, creator_id) values (?, ?, ?)";
-        jdbcTemplate.update(sql, quiz.getTitle(), quiz.getDescription(), quiz.getCreatorId());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, quiz.getTitle());
+            preparedStatement.setString(2, quiz.getDescription());
+            preparedStatement.setString(3, quiz.getCreatorId());
+            return preparedStatement;
+        }, keyHolder);
+
+        if (keyHolder.getKey() == null) {
+            throw new RuntimeException("Failed to create quiz");
+        }
+
+        return keyHolder.getKey().longValue();
     }
 
     public List<Quiz> findAll() {
