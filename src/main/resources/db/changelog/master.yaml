@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/initial/01-create-users.yaml
+  - include:
+      file: db/changelog/initial/02-create-quizzes.yaml
+  - include:
+      file: db/changelog/initial/03-create-questions.yaml

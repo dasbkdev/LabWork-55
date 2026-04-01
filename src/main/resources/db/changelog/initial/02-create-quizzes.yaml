@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02-create-quizzes
+      author: homework
+      changes:
+        - createTable:
+            tableName: quizzes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(1000)
+              - column:
+                  name: creator_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: quizzes
+            baseColumnNames: creator_id
+            referencedTableName: users
+            referencedColumnNames: username
+            constraintName: fk_quizzes_creator
