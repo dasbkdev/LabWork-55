@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/initial/02-create-quizzes.yaml
   - include:
       file: db/changelog/initial/03-create-questions.yaml
+  - include:
+      file: db/changelog/initial/04-create-options.yaml
