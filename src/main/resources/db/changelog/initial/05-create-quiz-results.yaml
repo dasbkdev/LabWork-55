@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: 05-create-quiz-results
+      author: homework
+      changes:
+        - createTable:
+            tableName: quiz_results
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quiz_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: correct_answers
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: wrong_answers
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_questions
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: score
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_rate
+                  type: int
+              - column:
+                  name: completed_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: quiz_results
+            baseColumnNames: username
+            referencedTableName: users
+            referencedColumnNames: username
+            constraintName: fk_quiz_results_user
+
+        - addForeignKeyConstraint:
+            baseTableName: quiz_results
+            baseColumnNames: quiz_id
+            referencedTableName: quizzes
+            referencedColumnNames: id
+            constraintName: fk_quiz_results_quiz
+
+        - addUniqueConstraint:
+            tableName: quiz_results
+            columnNames: username, quiz_id
+            constraintName: uc_quiz_results_username_quiz
